@@ -1,0 +1,111 @@
+---
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  misc-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  concurrency-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-reserved-identifier,
+  -bugprone-suspicious-include,
+  -cert-dcl03-c,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
+  -cert-oop*,
+  -cert-exp*,
+  -misc-unused-parameters,
+  -misc-no-recursion,
+  -readability-function-cognitive-complexity,
+  -readability-identifier-length,
+  -readability-uppercase-literal-suffix
+
+CheckOptions:
+  readability-identifier-naming.VariableCase: lower_case
+  readability-identifier-naming.FunctionCase: lower_case
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+  readability-identifier-naming.EnumCase: lower_case
+  readability-identifier-naming.EnumConstantCase: UPPER_CASE
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.UnionCase: lower_case
+  readability-identifier-naming.TypedefCase: lower_case
+  readability-identifier-naming.TypedefSuffix: _t
+  readability-identifier-naming.GlobalConstantCase: UPPER_CASE
+  readability-identifier-naming.StaticConstantCase: UPPER_CASE
+  readability-identifier-naming.ConstantCase: UPPER_CASE
+  readability-function-size.LineThreshold: 80
+  readability-function-size.StatementThreshold: 50
+  readability-function-size.BranchThreshold: 10
+  readability-function-size.ParameterThreshold: 8
+  readability-function-size.NestingThreshold: 4
+  readability-magic-numbers.IgnoredIntegerValues: '0;1;2;-1;8;16;32;64;128;256;512;1024'
+  readability-magic-numbers.IgnoredFloatingPointValues: '0.0;1.0;2.0;-1.0'
+  readability-magic-numbers.IgnorePowersOf2IntegerValues: true
+  readability-magic-numbers.IgnoreTypeAliases: true
+  readability-magic-numbers.IgnoreBitFieldsWidths: true
+  readability-magic-numbers.IgnoreArraySize: false
+  bugprone-implicit-widening-of-multiplication-result.UseCXXStaticCastsInCppSources: false
+  bugprone-narrowing-conversions.WarnOnIntegerNarrowingConversion: true
+  bugprone-narrowing-conversions.WarnOnIntegerToFloatingPointNarrowingConversion: true
+  bugprone-narrowing-conversions.WarnOnFloatingPointNarrowingConversion: true
+  bugprone-narrowing-conversions.WarnOnEquivalentBitWidth: true
+  bugprone-sizeof-expression.WarnOnSizeOfConstant: true
+  bugprone-sizeof-expression.WarnOnSizeOfIntegerExpression: true
+  bugprone-sizeof-expression.WarnOnSizeOfThis: false
+  bugprone-sizeof-expression.WarnOnSizeOfCompareToConstant: true
+  bugprone-string-constructor.WarnOnLargeLength: true
+  bugprone-string-constructor.LargeLengthThreshold: 0x800000
+  bugprone-suspicious-string-compare.WarnOnImplicitComparison: true
+  bugprone-suspicious-string-compare.WarnOnLogicalNotComparison: true
+  cert-err33-c.CheckedFunctions: 'aligned_alloc;calloc;clock;fclose;ferror;fflush;fgetc;fgetpos;fgets;fopen;fprintf;fputc;fputs;fread;freopen;fscanf;fseek;fsetpos;ftell;fwrite;getc;getchar;gets;malloc;memchr;mktime;putc;putchar;puts;realloc;remove;rename;scanf;setlocale;snprintf;sprintf;sscanf;strcat;strchr;strcmp;strcoll;strcpy;strcspn;strerror;strftime;strlen;strncat;strncmp;strncpy;strpbrk;strrchr;strspn;strstr;strtod;strtok;strtol;strtoul;strxfrm;ungetc;vfprintf;vfscanf;vprintf;vscanf;vsnprintf;vsprintf;vsscanf'
+  cert-err34-c.CheckedFunctions: 'atoi;atol;atoll;strtol;strtoll;strtoul;strtoull;strtoimax;strtoumax;strtof;strtod;strtold;scanf;fscanf;sscanf;vscanf;vsscanf;vfscanf'
+  cert-msc30-c.DisallowedSeedTypes: 'time_t'
+  cert-msc50-cpp.DisallowedSeedTypes: 'time_t'
+  readability-braces-around-statements.ShortStatementLines: 2
+  readability-simplify-boolean-expr.ChainedConditionalReturn: true
+  readability-simplify-boolean-expr.ChainedConditionalAssignment: true
+  readability-inconsistent-declaration-parameter-name.IgnoreMacros: true
+  readability-inconsistent-declaration-parameter-name.Strict: true
+  readability-else-after-return.WarnOnUnfixable: true
+  readability-else-after-return.WarnOnConditionVariables: true
+  readability-redundant-declaration.IgnoreMacros: false
+  readability-redundant-preprocessor.IgnoreMacros: false
+  readability-static-accessed-through-instance.NameSpecifierNestingThreshold: 3
+  performance-no-automatic-move.AllowedTypes: ''
+  portability-simd-intrinsics.Suggest: true
+  misc-definitions-in-headers.HeaderFileExtensions: 'h;hh;hpp;hxx'
+  misc-definitions-in-headers.UseHeaderFileExtension: true
+  misc-throw-by-value-catch-by-reference.CheckThrowTemporaries: false
+  clang-analyzer-core.CallAndMessage: true
+  clang-analyzer-core.DivideZero: true
+  clang-analyzer-core.NonNullParamChecker: true
+  clang-analyzer-core.NullDereference: true
+  clang-analyzer-core.StackAddressEscape: true
+  clang-analyzer-core.UndefinedBinaryOperatorResult: true
+  clang-analyzer-core.VLASize: true
+  clang-analyzer-core.uninitialized.ArraySubscript: true
+  clang-analyzer-core.uninitialized.Assign: true
+  clang-analyzer-core.uninitialized.Branch: true
+  clang-analyzer-core.uninitialized.UndefReturn: true
+  clang-analyzer-deadcode.DeadStores: true
+  clang-analyzer-security.insecureAPI.UncheckedReturn: true
+  clang-analyzer-security.insecureAPI.getpw: true
+  clang-analyzer-security.insecureAPI.gets: true
+  clang-analyzer-security.insecureAPI.mkstemp: true
+  clang-analyzer-security.insecureAPI.mktemp: true
+  clang-analyzer-security.insecureAPI.rand: true
+  clang-analyzer-security.insecureAPI.strcpy: true
+  clang-analyzer-security.insecureAPI.vfork: true
+  clang-analyzer-unix.API: true
+  clang-analyzer-unix.Malloc: true
+  clang-analyzer-unix.MallocSizeof: true
+  clang-analyzer-unix.MismatchedDeallocator: true
+  clang-analyzer-unix.cstring.BadSizeArg: true
+  clang-analyzer-unix.cstring.NullArg: true
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+User: myproject
