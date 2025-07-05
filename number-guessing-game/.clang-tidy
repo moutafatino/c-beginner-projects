@@ -40,7 +40,7 @@ CheckOptions:
   readability-function-size.BranchThreshold: 10
   readability-function-size.ParameterThreshold: 8
   readability-function-size.NestingThreshold: 4
-  readability-magic-numbers.IgnoredIntegerValues: '0;1;2;-1;8;16;32;64;128;256;512;1024'
+  readability-magic-numbers.IgnoredIntegerValues: '0;1;2;-1;10;100;8;16;32;64;128;256;512;1024'
   readability-magic-numbers.IgnoredFloatingPointValues: '0.0;1.0;2.0;-1.0'
   readability-magic-numbers.IgnorePowersOf2IntegerValues: true
   readability-magic-numbers.IgnoreTypeAliases: true
