@@ -1,8 +1,49 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define RANDOM_NUMBER_RANGE (11)
 #define MAX_ATTEMPTS (10)
+
+int get_int_value(const char *format, ...) {
+  char buffer[64];
+  long value;
+  char *endptr;
+  char prompt[256];
+
+  va_list args;
+  va_start(args, format);
+
+  vsnprintf(prompt, sizeof(prompt), format, args);
+  va_end(args);
+
+  while (1) {
+    printf("%s", prompt);
+
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+      fprintf(stderr, "Error reading input.\n");
+      exit(EXIT_FAILURE);
+    }
+
+    buffer[strcspn(buffer, "\n")] = 0;
+
+    value = strtol(buffer, &endptr, 10);
+
+    if (endptr == buffer) {
+      printf("Invalid input: Please enter a number!\n");
+      continue;
+    }
+
+    if (*endptr != '\0') {
+      printf("Invalid input: Please enter a valid number without extra "
+             "characters.\n");
+      continue;
+    }
+
+    return (int)value;
+  }
+}
 
 int main(void) {
 
@@ -14,13 +55,12 @@ int main(void) {
   long int random_number = arc4random_uniform(RANDOM_NUMBER_RANGE);
 
   printf("RANDOM NUMBER %ld\n", random_number);
-  int current_attempt = 0;
-  while (current_attempt != MAX_ATTEMPTS) {
-    printf("Attempt %d/%d: Enter your guess: ", current_attempt + 1,
-           MAX_ATTEMPTS);
 
-    int attempt;
-    scanf("%d", &attempt);
+  int current_attempt = 0;
+
+  while (current_attempt != MAX_ATTEMPTS) {
+    int attempt = get_int_value(
+        "Attempt %d/%d: Enter your guess: ", current_attempt + 1, MAX_ATTEMPTS);
 
     if (attempt > random_number) {
       printf("Too high! Try again.\n");
