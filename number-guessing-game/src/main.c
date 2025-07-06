@@ -15,8 +15,6 @@ int main(void) {
 
   long int random_number = arc4random_uniform(RANDOM_NUMBER_RANGE);
 
-  printf("RANDOM NUMBER %ld\n", random_number);
-
   int current_attempt = 0;
 
   while (current_attempt != MAX_ATTEMPTS) {
