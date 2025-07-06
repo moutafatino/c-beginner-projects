@@ -20,8 +20,8 @@ int main(void) {
   int current_attempt = 0;
 
   while (current_attempt != MAX_ATTEMPTS) {
-    int attempt = get_int_value(
-        "Attempt %d/%d: Enter your guess: ", current_attempt + 1, MAX_ATTEMPTS);
+    int attempt = get_int_value(1, 10, "Attempt %d/%d: Enter your guess: ",
+                                current_attempt + 1, MAX_ATTEMPTS);
 
     if (attempt > random_number) {
       printf("Too high! Try again.\n");
@@ -37,7 +37,7 @@ int main(void) {
   }
 
   if (current_attempt == MAX_ATTEMPTS) {
-    printf("Game Over! You ran out of attempts. The secret number was %ld.",
+    printf("Game Over! You ran out of attempts. The secret number was %ld.\n",
            random_number);
   }
 
