@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 
 set(VERSION "0.0.1")
-set(PROJECT_NAME "c-project-starter")
+set(PROJECT_NAME "todo-list")
 
 project(${PROJECT_NAME} VERSION ${VERSION} LANGUAGES C)
 
