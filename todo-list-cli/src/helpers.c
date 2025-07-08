@@ -31,11 +31,11 @@ int get_user_choice(char *prompt, int valid_range[], size_t size) {
         fprintf(stderr, "Invalid input: Please enter a valid number.\n");
         continue;
       }
-      // TODO: Validate the range of the number to be a valide choice.
       bool is_valid = false;
       for (size_t i = 0; i < size; i++) {
         if (number == valid_range[i]) {
           is_valid = true;
+          break;
         }
       }
 
