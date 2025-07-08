@@ -4,7 +4,7 @@
 #include <string.h>
 
 struct Todos *init_todos(void) {
-  FILE *todos_file = fopen("test.csv", "w+");
+  FILE *todos_file = fopen(TODOS_FILE, "a+");
   if (!todos_file) {
     perror("Error reading todos file");
     return NULL;
@@ -101,4 +101,18 @@ void end_app(struct Todos *app) {
   free_partial_todos(app->items, app->length);
 
   free(app);
+}
+
+void save_todos(struct Todos *app) {
+  FILE *todos_file = fopen(TODOS_FILE, "w");
+  if (!todos_file) {
+    perror("Errror opening todos file");
+    return;
+  }
+
+  for (size_t i = 0; i < app->length; i++) {
+    fprintf(todos_file, "%d:%s\n", app->items[i].ID, app->items[i].text);
+  }
+
+  fclose(todos_file);
 }

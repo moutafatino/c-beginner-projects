@@ -47,6 +47,8 @@ int create_new_todo(struct Todos *app) {
       (struct Todo){.ID = (int)app->length + 1, .text = input};
   app->length++;
 
+  save_todos(app);
+
   return EXIT_SUCCESS;
 }
 

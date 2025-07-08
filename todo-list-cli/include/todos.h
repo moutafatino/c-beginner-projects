@@ -15,5 +15,7 @@ struct Todos {
 
 struct Todos *init_todos(void);
 
+void save_todos(struct Todos *app);
+
 void free_partial_todos(struct Todo *items, size_t size);
 void end_app(struct Todos *app);
