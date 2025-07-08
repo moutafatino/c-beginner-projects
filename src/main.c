@@ -33,6 +33,8 @@ void list_todos(struct Todos todos) {
   }
 }
 
+int current_last_id = 1;
+
 int main(void) {
 
   struct Todos todos = {.length = 0};
@@ -51,6 +53,7 @@ int main(void) {
     case 1: {
       char *input = get_user_input("Enter new todo: ");
       todos.items[todos.length].text = input;
+      todos.items[todos.length].ID = current_last_id++;
       // TODO: assign unique ID to todo.
       todos.length++;
 
