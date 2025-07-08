@@ -10,7 +10,7 @@ struct Todo {
 struct Todos {
   struct Todo *items;
   size_t length;
-  size_t capacity; // TODO: implement resizing when adding new todo
+  size_t capacity;
 };
 
 struct Todos *init_todos(void);
