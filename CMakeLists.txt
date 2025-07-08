@@ -5,7 +5,7 @@ set(PROJECT_NAME "todo-list")
 
 project(${PROJECT_NAME} VERSION ${VERSION} LANGUAGES C)
 
-add_executable(${PROJECT_NAME} src/main.c)
+add_executable(${PROJECT_NAME} src/main.c src/helpers.c)
 
 target_include_directories(
 ${PROJECT_NAME}
