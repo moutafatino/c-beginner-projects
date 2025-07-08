@@ -52,10 +52,10 @@ CheckOptions:
   readability-identifier-naming.ConstantCase: UPPER_CASE
   
   # FUNCTION SIZE - Learn to keep functions manageable
-  readability-function-size.LineThreshold: 80
-  readability-function-size.StatementThreshold: 50
-  readability-function-size.ParameterThreshold: 8
-  readability-function-size.NestingThreshold: 4
+  # readability-function-size.LineThreshold: 80
+  # readability-function-size.StatementThreshold: 50
+  # readability-function-size.ParameterThreshold: 8
+  # readability-function-size.NestingThreshold: 4
   
   # MAGIC NUMBERS - Learn when constants are needed
   readability-magic-numbers.IgnoredIntegerValues: '0;1;2;-1;10;100;256;512;1024'

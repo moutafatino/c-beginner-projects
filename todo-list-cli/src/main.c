@@ -1,14 +1,11 @@
 #include "helpers.h"
+#include "todos.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define TODOS_FILE "todos.csv"
-
-
-
-
 
 void show_help_menu(void) {
   printf("--- Todo List Menu ---\n");
@@ -29,6 +26,28 @@ void list_todos(struct Todos *todos) {
   for (size_t i = 0; i < todos->length; i++) {
     printf("%d - %s\n", todos->items[i].ID, todos->items[i].text);
   }
+}
+
+int create_new_todo(struct Todos *app) {
+  if (app->length >= app->capacity) {
+    app->capacity += 2;
+    struct Todo *items =
+        realloc(app->items, sizeof(struct Todo) * app->capacity);
+    if (!items) {
+      fprintf(stderr, "Error: Failed to realloc memory for todos.\n");
+      return EXIT_FAILURE;
+    }
+
+    app->items = items;
+  }
+
+  char *input = get_user_input("Enter new todo: ");
+
+  app->items[app->length] =
+      (struct Todo){.ID = (int)app->length + 1, .text = input};
+  app->length++;
+
+  return EXIT_SUCCESS;
 }
 
 int main(void) {
@@ -54,11 +73,12 @@ int main(void) {
       return EXIT_SUCCESS;
     }
     case 1: {
-      char *input = get_user_input("Enter new todo: ");
-      app->items[app->length].text = input;
-      app->items[app->length].ID = 1;
-      // TODO: assign unique ID to todo.
-      app->length++;
+
+      int result = create_new_todo(app);
+      if (result == EXIT_FAILURE) {
+        fprintf(stderr, "Error while creating new todo");
+        return result;
+      }
 
       printf("Todo added successfully\n");
       break;

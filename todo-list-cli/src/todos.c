@@ -4,7 +4,7 @@
 #include <string.h>
 
 struct Todos *init_todos(void) {
-  FILE *todos_file = fopen(TODOS_FILE, "r");
+  FILE *todos_file = fopen("test.csv", "w+");
   if (!todos_file) {
     perror("Error reading todos file");
     return NULL;
@@ -21,6 +21,7 @@ struct Todos *init_todos(void) {
 
   char buffer[buffer_size];
   size_t i = 0;
+  char *endptr;
   while (fgets(buffer, buffer_size, todos_file) != NULL) {
     if (buffer[0] == '\n' || buffer[0] == '\0') {
       continue;
@@ -31,7 +32,12 @@ struct Todos *init_todos(void) {
       perror("Error: invalid lien format, skipping");
       continue;
     }
-    int id = atoi(token); // TODO: move to strtol
+
+    int id = (int)strtol(token, &endptr, 10);
+    if (endptr == token || (*endptr != '\0' && *endptr != '\n')) {
+      perror("Error: invalid ID format, skipping");
+      continue;
+    }
 
     token = strtok(NULL, ":");
     if (!token) {
@@ -78,15 +84,7 @@ struct Todos *init_todos(void) {
 
   todos->capacity = i;
   todos->length = i;
-  struct Todo *shrinked_items = realloc(items, sizeof(struct Todo) * i);
-  if (!shrinked_items) {
-    perror("Error: failed to shrink the items capacity returning the original "
-           "items.");
-    todos->capacity = todos_capacity;
-    todos->items = items;
-    return todos;
-  }
-  todos->items = shrinked_items;
+  todos->items = items;
 
   return todos;
 }
