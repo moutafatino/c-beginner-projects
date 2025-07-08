@@ -1,0 +1,19 @@
+#pragma once
+#include <stddef.h>
+
+#define TODOS_FILE "todos.csv"
+
+struct Todo {
+  int ID;
+  char *text;
+};
+struct Todos {
+  struct Todo *items;
+  size_t length;
+  size_t capacity; // TODO: implement resizing when adding new todo
+};
+
+struct Todos *init_todos(void);
+
+void free_partial_todos(struct Todo *items, size_t size);
+void end_app(struct Todos *app);
