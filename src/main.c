@@ -48,6 +48,11 @@ int get_user_choice(char *prompt) {
 
 void list_todos(struct Todos todos) {
 
+  if (todos.length == 0) {
+    printf("No available todos.\n");
+    return;
+  }
+
   for (int i = 0; i < todos.length; i++) {
     printf("%d - %s\n", todos.items[i].ID, todos.items[i].text);
   }
@@ -105,9 +110,7 @@ char *get_user_input(char *prompt) {
 
 int main(void) {
 
-  struct Todos todos;
-  todos.items[0] = (struct Todo){.ID = 1, .text = "First Todo"};
-  todos.length = 1;
+  struct Todos todos = {.length = 0};
 
   show_help_menu();
 
