@@ -55,6 +55,7 @@ int create_new_todo(struct Todos *app) {
 int main(void) {
 
   struct Todos *app = init_todos();
+  int valid_choices[] = {0, 1, 2, 3};
 
   if (!app) {
     perror("Error initializing the app");
@@ -65,7 +66,9 @@ int main(void) {
 
   while (true) {
 
-    int choice = get_user_choice("Enter your choice: ");
+    int choice =
+        get_user_choice("Enter your choice: ", valid_choices,
+                        sizeof(valid_choices) / sizeof(valid_choices[0]));
 
     switch (choice) {
     case 0: {

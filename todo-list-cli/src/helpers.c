@@ -3,16 +3,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-int get_user_choice(char *prompt) {
-  char buffer[8];
+void clear_input_buffer(void) {
+  int c;
+  while ((c = getchar()) != '\n' && c != EOF)
+    ;
+}
+
+int get_user_choice(char *prompt, int valid_range[], size_t size) {
+  char buffer[64];
   char *endptr;
   long number = -1;
 
+  char *newline_found;
   while (true) {
     printf("%s", prompt);
-    if (fgets(buffer, 8, stdin)) {
-      buffer[strcspn(buffer, "\n")] = 0;
+    if (fgets(buffer, sizeof(buffer), stdin)) {
+      newline_found = strchr(buffer, '\n');
 
+      if (newline_found) {
+        buffer[strcspn(buffer, "\n")] = 0;
+      } else {
+        clear_input_buffer();
+      }
       number = strtol(buffer, &endptr, 10);
 
       if (endptr == buffer || (*endptr && *endptr != '\n')) {
@@ -20,6 +32,18 @@ int get_user_choice(char *prompt) {
         continue;
       }
       // TODO: Validate the range of the number to be a valide choice.
+      bool is_valid = false;
+      for (size_t i = 0; i < size; i++) {
+        if (number == valid_range[i]) {
+          is_valid = true;
+        }
+      }
+
+      if (!is_valid) {
+        fprintf(stderr,
+                "Invalid choice: Please enter a number in the valid range.\n");
+        continue;
+      }
 
       break;
     }

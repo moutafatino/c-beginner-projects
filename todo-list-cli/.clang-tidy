@@ -58,7 +58,7 @@ CheckOptions:
   # readability-function-size.NestingThreshold: 4
   
   # MAGIC NUMBERS - Learn when constants are needed
-  readability-magic-numbers.IgnoredIntegerValues: '0;1;2;-1;10;100;256;512;1024'
+  readability-magic-numbers.IgnoredIntegerValues: '0;1;2;3;4;5;6;7;8;9;-1;10;100;16;32;64;128;256;512;1024'
   readability-magic-numbers.IgnoredFloatingPointValues: '0.0;1.0;-1.0'
   readability-magic-numbers.IgnorePowersOf2IntegerValues: true
   readability-magic-numbers.IgnoreArraySize: false
