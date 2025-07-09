@@ -1,18 +1,19 @@
 #include "todos.h"
+#include "helpers.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-struct Todos *init_todos(void) {
+struct App *init_app(void) {
   FILE *todos_file = fopen(TODOS_FILE, "a+");
   if (!todos_file) {
-    perror("Error reading todos file");
+    perror("Error: Opening todos file");
     return NULL;
   }
   size_t todos_capacity = 4;
   struct Todo *items = malloc(sizeof(struct Todo) * todos_capacity);
   if (!items) {
-    perror("Error allocating space for todos");
+    perror("Error: Failed to allocate memory for todos");
     fclose(todos_file);
     return NULL;
   }
@@ -29,7 +30,7 @@ struct Todos *init_todos(void) {
 
     char *token = strtok(buffer, ":");
     if (!token) {
-      perror("Error: invalid lien format, skipping");
+      perror("Error: Invalid line format, skipping");
       continue;
     }
 
@@ -51,8 +52,8 @@ struct Todos *init_todos(void) {
       todos_capacity *= 2;
       struct Todo *temp = realloc(items, sizeof(struct Todo) * todos_capacity);
       if (!temp) {
-        perror("Error faield to reallocate space for todos");
-        free_partial_todos(items, i);
+        perror("Error: Failed to reallocate space for todos");
+        free_todos(items, i);
         fclose(todos_file);
         return NULL;
       }
@@ -63,8 +64,8 @@ struct Todos *init_todos(void) {
     char *text = strdup(token);
 
     if (!text) {
-      perror("Error allocating text for todo");
-      free_partial_todos(items, i);
+      perror("Error: Failed to allocate memory for todo text");
+      free_todos(items, i);
       fclose(todos_file);
       return NULL;
     }
@@ -75,10 +76,10 @@ struct Todos *init_todos(void) {
 
   fclose(todos_file);
 
-  struct Todos *todos = malloc(sizeof(struct Todos));
+  struct App *todos = malloc(sizeof(struct App));
   if (!todos) {
-    perror("Error allocating todos structure");
-    free_partial_todos(items, i);
+    perror("Error: Failed to allocate memory for App object.");
+    free_todos(items, i);
     return NULL;
   }
 
@@ -89,24 +90,22 @@ struct Todos *init_todos(void) {
   return todos;
 }
 
-void free_partial_todos(struct Todo *items, size_t size) {
+void free_todos(struct Todo *items, size_t size) {
   for (size_t i = 0; i < size; i++) {
     free(items[i].text);
   }
-
   free(items);
 }
 
-void end_app(struct Todos *app) {
-  free_partial_todos(app->items, app->length);
-
+void end_app(struct App *app) {
+  free_todos(app->items, app->length);
   free(app);
 }
 
-void save_todos(struct Todos *app) {
+void save_todos(struct App *app) {
   FILE *todos_file = fopen(TODOS_FILE, "w");
   if (!todos_file) {
-    perror("Errror opening todos file");
+    perror("Error: Failed to open todos file for writing");
     return;
   }
 
@@ -115,4 +114,44 @@ void save_todos(struct Todos *app) {
   }
 
   fclose(todos_file);
+}
+
+void list_todos(struct App *todos) {
+
+  if (todos->length == 0) {
+    printf("No available todos.\n");
+    return;
+  }
+
+  for (size_t i = 0; i < todos->length; i++) {
+    printf("%d - %s\n", todos->items[i].ID, todos->items[i].text);
+  }
+}
+
+enum create_todo_result create_new_todo(struct App *app) {
+  if (app->length >= app->capacity) {
+    app->capacity += 2;
+    struct Todo *items =
+        realloc(app->items, sizeof(struct Todo) * app->capacity);
+    if (!items) {
+      fprintf(stderr, "Error: Failed to realloc memory for todos.\n");
+      return CREATE_TODO_FAILURE;
+    }
+    app->items = items;
+  }
+
+  char *input;
+  enum input_error result = get_user_input("Enter new todo: ", &input);
+  if (result != INPUT_SUCCESS) {
+    fprintf(stderr, "Error: %s\n", input_error_string(result));
+    return CREATE_TODO_FAILURE;
+  }
+
+  app->items[app->length] =
+      (struct Todo){.ID = (int)app->length + 1, .text = input};
+  app->length++;
+
+  save_todos(app);
+
+  return CREATE_TODO_SUCCESS;
 }

@@ -1,3 +1,4 @@
+#include "helpers.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@ void clear_input_buffer(void) {
     ;
 }
 
-int get_user_choice(char *prompt, int valid_range[], size_t size) {
+int get_user_choice(char *prompt, int valid_choices[], size_t size) {
   char buffer[64];
   char *endptr;
   long number = -1;
@@ -33,7 +34,7 @@ int get_user_choice(char *prompt, int valid_range[], size_t size) {
       }
       bool is_valid = false;
       for (size_t i = 0; i < size; i++) {
-        if (number == valid_range[i]) {
+        if (number == valid_choices[i]) {
           is_valid = true;
           break;
         }
@@ -41,7 +42,7 @@ int get_user_choice(char *prompt, int valid_range[], size_t size) {
 
       if (!is_valid) {
         fprintf(stderr,
-                "Invalid choice: Please enter a number in the valid range.\n");
+                "Invalid input: Please enter a valid command number.\n");
         continue;
       }
 
@@ -51,20 +52,18 @@ int get_user_choice(char *prompt, int valid_range[], size_t size) {
 
   return (int)number;
 }
-char *get_user_input(char *prompt) {
+enum input_error get_user_input(char *prompt, char **result) {
   size_t buffer_size = 128;
   char *buffer = malloc(sizeof(char) * buffer_size);
   if (!buffer) {
-    perror("Failed to allocate initial buffer!");
-    return NULL;
+    return INPUT_ERROR_MALLOC_FAILED;
   }
 
   printf("%s", prompt);
 
   if (!fgets(buffer, (int)buffer_size, stdin)) {
-    perror("Failed to read input!");
     free(buffer);
-    return NULL;
+    return INPUT_ERROR_READ_FAILED;
   }
 
   size_t len = strlen(buffer);
@@ -74,17 +73,15 @@ char *get_user_input(char *prompt) {
     buffer_size *= 2;
     char *temp = realloc(buffer, buffer_size);
     if (!temp) {
-      perror("Failed to reallocate buffer!");
       free(buffer);
-      return NULL;
+      return INPUT_ERROR_REALLOC_FAILED;
     }
 
     buffer = temp;
 
     if (!fgets(buffer + len, (int)(buffer_size - len), stdin)) {
-      perror("Failed to read more input!");
       free(buffer);
-      return NULL;
+      return INPUT_ERROR_READ_FAILED;
     }
 
     len = strlen(buffer);
@@ -94,9 +91,26 @@ char *get_user_input(char *prompt) {
 
   char *final_buffer = realloc(buffer, strlen(buffer) + 1);
   if (!final_buffer) {
-    perror("Failed to shrink buffer, returning original sized buffer!");
-    return buffer;
+    *result = buffer;
+  } else {
+    *result = final_buffer;
   }
+  return INPUT_SUCCESS;
+}
 
-  return final_buffer;
+const char *input_error_string(enum input_error error) {
+  switch (error) {
+  case INPUT_SUCCESS:
+    return "Success";
+  case INPUT_ERROR_MALLOC_FAILED:
+    return "Memory allocation failed";
+  case INPUT_ERROR_REALLOC_FAILED:
+    return "Memory reallocation failed";
+  case INPUT_ERROR_READ_FAILED:
+    return "Input read failed";
+  case INPUT_ERROR_INVALID_PARAM:
+    return "Invalid parameter";
+  default:
+    return "Unknown error";
+  }
 }

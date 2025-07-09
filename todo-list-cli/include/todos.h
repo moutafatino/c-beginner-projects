@@ -3,19 +3,28 @@
 
 #define TODOS_FILE "todos.csv"
 
+enum create_todo_result {
+  CREATE_TODO_SUCCESS = 0,
+  CREATE_TODO_FAILURE = -1,
+};
+
 struct Todo {
   int ID;
   char *text;
 };
-struct Todos {
+struct App {
   struct Todo *items;
   size_t length;
   size_t capacity;
 };
 
-struct Todos *init_todos(void);
+struct App *init_app(void);
 
-void save_todos(struct Todos *app);
+void save_todos(struct App *app);
 
-void free_partial_todos(struct Todo *items, size_t size);
-void end_app(struct Todos *app);
+void list_todos(struct App *todos);
+
+enum create_todo_result create_new_todo(struct App *app);
+
+void free_todos(struct Todo *items, size_t size);
+void end_app(struct App *app);
