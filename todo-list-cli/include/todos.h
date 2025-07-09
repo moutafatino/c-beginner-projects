@@ -16,6 +16,7 @@ struct App {
   struct Todo *items;
   size_t length;
   size_t capacity;
+  int next_id;
 };
 
 struct App *init_app(void);

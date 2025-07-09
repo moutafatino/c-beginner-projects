@@ -23,6 +23,7 @@ struct App *init_app(void) {
   char buffer[buffer_size];
   size_t i = 0;
   char *endptr;
+  int max_id = 0; // to select the next ID
   while (fgets(buffer, buffer_size, todos_file) != NULL) {
     if (buffer[0] == '\n' || buffer[0] == '\0') {
       continue;
@@ -38,6 +39,10 @@ struct App *init_app(void) {
     if (endptr == token || (*endptr != '\0' && *endptr != '\n')) {
       perror("Error: invalid ID format, skipping");
       continue;
+    }
+
+    if (id > max_id) {
+      max_id = id; // update max_id to the highest ID found
     }
 
     token = strtok(NULL, ":");
@@ -85,6 +90,7 @@ struct App *init_app(void) {
 
   todos->capacity = i;
   todos->length = i;
+  todos->next_id = max_id + 1;
   todos->items = items;
 
   return todos;
@@ -147,9 +153,9 @@ enum create_todo_result create_new_todo(struct App *app) {
     return CREATE_TODO_FAILURE;
   }
 
-  app->items[app->length] =
-      (struct Todo){.ID = (int)app->length + 1, .text = input};
+  app->items[app->length] = (struct Todo){.ID = app->next_id, .text = input};
   app->length++;
+  app->next_id++;
 
   save_todos(app);
 
