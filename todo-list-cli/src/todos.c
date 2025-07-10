@@ -189,3 +189,26 @@ const char *toggle_todo_status(struct App *app, int id) {
   }
   return NULL;
 }
+
+bool delete_todo(struct App *app, int id) {
+
+  int todo_index = -1;
+
+  for (size_t i = 0; i < app->length; i++) {
+    if (app->items[i].ID == id) {
+      todo_index = (int)i;
+    }
+  }
+
+  if (todo_index == -1) {
+    return false;
+  }
+
+  for (int i = todo_index; i < (int)app->length - 1; i++) {
+    app->items[i] = app->items[i + 1];
+  }
+  app->length--;
+
+  save_todos(app);
+  return true;
+}

@@ -61,6 +61,14 @@ const char *toggle_todo_status(struct App *app, int id);
 enum create_todo_result create_new_todo(struct App *app);
 
 /*
+ * @brief Deletes a todo item by its ID.
+ * @param app The application instance containing the todo items.
+ * @param id The ID of the todo item to delete.
+ * @return True if the todo item was successfully deleted, false otherwise.
+ * */
+bool delete_todo(struct App *app, int id);
+
+/*
  * @brief Cleans up the todo items.
  * @param items The array of todo items to free.
  * @param size The number of items in the array.

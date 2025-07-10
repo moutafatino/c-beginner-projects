@@ -11,7 +11,8 @@ void show_help_menu(void) {
   printf("1. Add Todo\n");
   printf("2. View Todos\n");
   printf("3. Mark Todo Complete\n");
-  printf("4. Help\n");
+  printf("4. Delete Todo\n");
+  printf("5. Help\n");
   printf("0. Exit\n");
 }
 
@@ -19,7 +20,7 @@ int main(void) {
 
   struct App *app = init_app();
 
-  int valid_choices[] = {0, 1, 2, 3};
+  int valid_choices[] = {0, 1, 2, 3, 4, 5};
 
   if (!app) {
     perror("Error: Failed to initialize the application. Quitting...");
@@ -57,7 +58,7 @@ int main(void) {
     }
     case 3: {
       int todo_id =
-          get_int_input("Enter the number of the task to mark as complete: ");
+          get_int_input("Enter the number of the todo to mark as complete: ");
 
       const char *result = toggle_todo_status(app, todo_id);
       if (!result) {
@@ -68,6 +69,20 @@ int main(void) {
       break;
     }
     case 4: {
+      int todo_id =
+          get_int_input("Enter the number of the todo to be deleted: ");
+
+      bool result = delete_todo(app, todo_id);
+      if (!result) {
+        printf("Todo with the ID %d does not exist.\n", todo_id);
+        continue;
+      }
+
+      printf("Todo %d deleted successfully\n", todo_id);
+
+      break;
+    }
+    case 5: {
       show_help_menu();
       break;
     }
