@@ -61,4 +61,3 @@ I split the code into a few parts to keep it organized:
 * **File I/O:** Reading from and writing to the `todos.csv` file. I used `strtok` to parse the lines, which was a bit tricky.
 * **Project Organization:** Using header files (`.h`) to declare functions and structs, and separating the implementation into different `.c` files.
 * **Build Systems:** Setting up a basic `CMakeLists.txt` to compile everything together (actually I just used the quick start template from a neovim plugin).
-
