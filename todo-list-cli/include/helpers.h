@@ -12,6 +12,7 @@ enum input_error {
 
 const char *input_error_string(enum input_error error);
 
+int get_int_input(char *prompt);
 int get_user_choice(char *prompt, int valid_choices[], size_t size);
 
 enum input_error get_user_input(char *prompt, char **result);

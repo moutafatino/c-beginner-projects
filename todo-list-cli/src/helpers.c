@@ -10,7 +10,7 @@ void clear_input_buffer(void) {
     ;
 }
 
-int get_user_choice(char *prompt, int valid_choices[], size_t size) {
+int get_int_input(char *prompt) {
   char buffer[64];
   char *endptr;
   long number = -1;
@@ -32,19 +32,6 @@ int get_user_choice(char *prompt, int valid_choices[], size_t size) {
         fprintf(stderr, "Invalid input: Please enter a valid number.\n");
         continue;
       }
-      bool is_valid = false;
-      for (size_t i = 0; i < size; i++) {
-        if (number == valid_choices[i]) {
-          is_valid = true;
-          break;
-        }
-      }
-
-      if (!is_valid) {
-        fprintf(stderr,
-                "Invalid input: Please enter a valid command number.\n");
-        continue;
-      }
 
       break;
     }
@@ -52,6 +39,27 @@ int get_user_choice(char *prompt, int valid_choices[], size_t size) {
 
   return (int)number;
 }
+
+int get_user_choice(char *prompt, int valid_choices[], size_t size) {
+  while (true) {
+    int number = get_int_input(prompt);
+    bool is_valid = false;
+    for (size_t i = 0; i < size; i++) {
+      if (number == valid_choices[i]) {
+        is_valid = true;
+        break;
+      }
+    }
+
+    if (!is_valid) {
+      fprintf(stderr, "Invalid input: Please enter a valid command number.\n");
+      continue;
+    }
+
+    return number;
+  }
+}
+
 enum input_error get_user_input(char *prompt, char **result) {
   size_t buffer_size = 128;
   char *buffer = malloc(sizeof(char) * buffer_size);

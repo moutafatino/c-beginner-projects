@@ -51,8 +51,6 @@ struct App *init_app(void) {
       continue;
     }
 
-    token[strcspn(token, "\n")] = '\0';
-
     if (i == todos_capacity) {
       todos_capacity *= 2;
       struct Todo *temp = realloc(items, sizeof(struct Todo) * todos_capacity);
@@ -75,7 +73,18 @@ struct App *init_app(void) {
       return NULL;
     }
 
-    items[i] = (struct Todo){.ID = id, .text = text};
+    token = strtok(NULL, ":");
+
+    token[strcspn(token, "\n")] = '\0';
+    if (strcmp(token, "true") && strcmp(token, "false")) {
+      printf("the token is %s and is %d\n", token, strcmp(token, "true"));
+      fprintf(stderr, "Error: Invalid status for ID %d, skipping\n", id);
+      continue;
+    }
+
+    bool is_done = strcmp(token, "true") == 0 ? true : false;
+
+    items[i] = (struct Todo){.ID = id, .text = text, .is_done = is_done};
     i++;
   }
 
@@ -116,7 +125,8 @@ void save_todos(struct App *app) {
   }
 
   for (size_t i = 0; i < app->length; i++) {
-    fprintf(todos_file, "%d:%s\n", app->items[i].ID, app->items[i].text);
+    fprintf(todos_file, "%d:%s:%s\n", app->items[i].ID, app->items[i].text,
+            app->items[i].is_done ? "true" : "false");
   }
 
   fclose(todos_file);
@@ -130,7 +140,8 @@ void list_todos(struct App *todos) {
   }
 
   for (size_t i = 0; i < todos->length; i++) {
-    printf("%d - %s\n", todos->items[i].ID, todos->items[i].text);
+    printf("%d - [%s] %s\n", todos->items[i].ID,
+           todos->items[i].is_done ? "X" : " ", todos->items[i].text);
   }
 }
 
@@ -153,11 +164,28 @@ enum create_todo_result create_new_todo(struct App *app) {
     return CREATE_TODO_FAILURE;
   }
 
-  app->items[app->length] = (struct Todo){.ID = app->next_id, .text = input};
+  app->items[app->length] =
+      (struct Todo){.ID = app->next_id, .text = input, .is_done = false};
   app->length++;
   app->next_id++;
 
   save_todos(app);
 
   return CREATE_TODO_SUCCESS;
+}
+
+const char *toggle_todo_status(struct App *app, int id) {
+  for (size_t i = 0; i < app->length; i++) {
+    if (app->items[i].ID == id) {
+      app->items[i].is_done = !app->items[i].is_done;
+
+      save_todos(app);
+
+      if (app->items[i].is_done) {
+        return "Todo marked as complete!";
+      }
+      return "Todo marked as in progress!";
+    }
+  }
+  return NULL;
 }
