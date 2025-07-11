@@ -12,8 +12,25 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
+  int open_flags = O_WRONLY | O_CREAT;
+
+  int opt;
+
+  while ((opt = getopt(argc, argv, "a")) != -1) {
+    switch (opt) {
+    case 'a':
+      open_flags |= O_APPEND;
+      printf("SHOULD APPEND\n");
+      break;
+    case '?':
+      fprintf(stderr, "usage: %s file [-a]\n", argv[1]);
+      return EXIT_FAILURE;
+      break;
+    }
+  }
+
   int output_fd =
-      open(argv[1], O_WRONLY | O_CREAT,
+      open(argv[optind], open_flags,
            S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 
   size_t buff_size = 128;
