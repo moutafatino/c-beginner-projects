@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
       open_flags |= O_APPEND;
       printf("SHOULD APPEND\n");
       break;
-    case '?':
+    default:
       fprintf(stderr, "usage: %s file [-a]\n", argv[1]);
       return EXIT_FAILURE;
       break;
@@ -84,5 +84,9 @@ int main(int argc, char **argv) {
 
   free(buff);
 
+  if (close(output_fd) == -1) {
+    perror("close");
+    return EXIT_FAILURE;
+  }
   return 0;
 }
