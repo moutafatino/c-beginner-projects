@@ -1,6 +1,6 @@
 # C Beginner Projects
 
-This repository contains a collection of simple C projects that I created while learning the language.
+This repository contains a collection of C projects that I created while learning.
 
 Each project is self-contained in its own directory and includes its own build files and source code.
 
@@ -52,4 +52,3 @@ Generally, the steps are:
     ```sh
     ./<executable_name>
     ```
-
