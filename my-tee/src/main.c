@@ -12,10 +12,10 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  // int output_fd =
-  //     open(argv[1], O_WRONLY | O_CREAT,
-  //          S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-  //
+  int output_fd =
+      open(argv[1], O_WRONLY | O_CREAT,
+           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
   size_t buff_size = 128;
 
   char *buff = malloc(buff_size);
@@ -44,6 +44,12 @@ int main(int argc, char **argv) {
     if (newline_pos) {
       *newline_pos = '\0';
       printf("%s\n", buff);
+
+      if (write(output_fd, buff, buff_size) == -1) {
+        perror("write");
+        return EXIT_FAILURE;
+      }
+
       memset(buff, 0, buff_size);
       len = 0;
     } else {
