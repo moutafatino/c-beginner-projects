@@ -32,7 +32,10 @@ int main(int argc, char **argv) {
       mode_append = true;
       break;
     }
-    case 'h':
+    case 'h': {
+      print_usage(argv[0]);
+      return EXIT_SUCCESS;
+    }
     case '?': {
       print_usage(argv[0]);
       return EXIT_FAILURE;
