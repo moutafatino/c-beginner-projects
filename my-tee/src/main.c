@@ -59,8 +59,12 @@ int main(int argc, char **argv) {
   }
 
   int output_fd =
-      open(argv[optind], open_flags,
-           S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+      open(argv[optind], open_flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+
+  if (output_fd == -1) {
+    perror("open");
+    return EXIT_FAILURE;
+  }
 
   const size_t BUFF_SIZE = 4096;
   char buffer[BUFF_SIZE];
