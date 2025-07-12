@@ -30,6 +30,12 @@ int main(int argc, char **argv) {
       close(output_fd);
       return EXIT_FAILURE;
     }
+
+    if (write(output_fd, buffer, (size_t)bytes_read) != bytes_read) {
+      perror("write to file");
+      close(output_fd);
+      return EXIT_FAILURE;
+    }
   }
 
   if (bytes_read == -1) {
